@@ -1,8 +1,9 @@
-import org.scalatest.testng.TestNGSuite
+import org.scalatest.junit.AssertionsForJUnit
 import org.scalatest.matchers.ShouldMatchers
-import org.testng.annotations._
+import org.junit.Assert._
+import org.junit.Test
 
-class ScalifyTests extends TestNGSuite with ShouldMatchers {
+class ScalifyTests extends AssertionsForJUnit with ShouldMatchers {
     val subject1 = new GroovySubject("A")
     val subject2 = new GroovySubject("B")
 

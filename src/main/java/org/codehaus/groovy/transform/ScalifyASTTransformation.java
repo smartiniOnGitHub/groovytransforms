@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 the original author or authors.
+ * Copyright 2009-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package groovyx.transform;
+package org.codehaus.groovy.transform;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,23 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.groovy.ast.ASTNode;
-import org.codehaus.groovy.ast.AnnotatedNode;
-import org.codehaus.groovy.ast.AnnotationNode;
-import org.codehaus.groovy.ast.ClassHelper;
-import org.codehaus.groovy.ast.ClassNode;
-import org.codehaus.groovy.ast.FieldNode;
-import org.codehaus.groovy.ast.MethodNode;
-import org.codehaus.groovy.ast.Parameter;
-import org.codehaus.groovy.ast.PropertyNode;
-import org.codehaus.groovy.ast.expr.ArgumentListExpression;
-import org.codehaus.groovy.ast.expr.ConstantExpression;
-import org.codehaus.groovy.ast.expr.Expression;
-import org.codehaus.groovy.ast.expr.MethodCallExpression;
-import org.codehaus.groovy.ast.expr.VariableExpression;
-import org.codehaus.groovy.ast.stmt.ExpressionStatement;
-import org.codehaus.groovy.ast.stmt.ReturnStatement;
-import org.codehaus.groovy.ast.stmt.Statement;
+import org.codehaus.groovy.ast.*;
+import org.codehaus.groovy.ast.expr.*;
+import org.codehaus.groovy.ast.stmt.*;
 import org.codehaus.groovy.control.CompilePhase;
 import org.codehaus.groovy.control.SourceUnit;
 import org.codehaus.groovy.control.messages.SyntaxErrorMessage;
@@ -48,6 +34,7 @@ import org.codehaus.groovy.transform.ASTTransformation;
 import org.codehaus.groovy.transform.GroovyASTTransformation;
 import org.objectweb.asm.Opcodes;
 
+import groovyx.transform.Scalify;
 import scala.ScalaObject;
 
 /**
@@ -67,7 +54,7 @@ import scala.ScalaObject;
 public class ScalifyASTTransformation implements ASTTransformation, Opcodes {
     protected static ClassNode boundClassNode = new ClassNode(Scalify.class);
     private static final ClassNode SCALA_OBJECT_IFACE = new ClassNode(ScalaObject.class);
-    private static final Map<String,MethodInfo> METHOD_INFO_MAP = new HashMap<String,MethodInfo>();
+    private static final Map<String, MethodInfo> METHOD_INFO_MAP = new HashMap<String, MethodInfo>();
 
     static {
         METHOD_INFO_MAP.put("plus", new MethodInfo("$plus",1));
@@ -115,7 +102,6 @@ public class ScalifyASTTransformation implements ASTTransformation, Opcodes {
         for (PropertyNode propertyNode : (Collection<PropertyNode>) declaringClass.getProperties()) {
             if (propertyNode.getName().equals(fieldName)) {
                 if (field.isStatic()) {
-                    //noinspection ThrowableInstanceNeverThrown
                     source.getErrorCollector().addErrorAndContinue(
                                 new SyntaxErrorMessage(new SyntaxException(
                                     "@Scalify cannot annotate a static property.",
@@ -128,10 +114,9 @@ public class ScalifyASTTransformation implements ASTTransformation, Opcodes {
                 return;
             }
         }
-        //noinspection ThrowableInstanceNeverThrown
         source.getErrorCollector().addErrorAndContinue(
                 new SyntaxErrorMessage(new SyntaxException(
-                        "@Scalify must be on a property, not a field.  Try removing the private, protected, or public modifier.",
+                        "@Scalify must be on a property, not a field. Try removing the private, protected, or public modifier.",
                         node.getLineNumber(),
                         node.getColumnNumber()),
                         source));
@@ -139,38 +124,39 @@ public class ScalifyASTTransformation implements ASTTransformation, Opcodes {
 
     private void scalifyClass(SourceUnit source, AnnotationNode node, ClassNode classNode) {
         List<MethodNode> translatedMethods = new ArrayList<MethodNode>();
-        for( MethodNode methodNode : classNode.getMethods()) {
+        for(MethodNode methodNode : classNode.getMethods()) {
            MethodInfo mi = METHOD_INFO_MAP.get(methodNode.getName());
-           if( mi != null &&
+
+           if(mi == null ||
                !methodNode.isPublic() ||
                methodNode.isStatic() ||
                methodNode.getReturnType().equals(ClassHelper.VOID_TYPE) ||
                methodNode.getReturnType().equals(ClassHelper.void_WRAPPER_TYPE) ||
-               methodNode.getParameters().length != mi.argCount ) continue;
+               methodNode.getParameters().length != mi.argCount) continue;
 
            ArgumentListExpression ale = mi.argCount == 0 ? ArgumentListExpression.EMPTY_ARGUMENTS :
                 new ArgumentListExpression(new Expression[]{
                     new VariableExpression(methodNode.getParameters()[0].getName())});
+
            ExpressionStatement st =  new ExpressionStatement(
                  new MethodCallExpression(
                          VariableExpression.THIS_EXPRESSION,
                          methodNode.getName(), ale));
-
-           translatedMethods.add( new MethodNode(mi.name,
+                    
+           translatedMethods.add(new MethodNode(mi.name,
                  methodNode.getModifiers(),
                  methodNode.getReturnType(),
                  methodNode.getParameters(),
                  methodNode.getExceptions(),
-                 new ReturnStatement(st)));
-        }
-        for( MethodNode mn : translatedMethods ) classNode.addMethod(mn);
+                 new ReturnStatement(st)));                 
+        }        
+        for(MethodNode mn : translatedMethods) classNode.addMethod(mn);
 
         for (PropertyNode propertyNode : (Collection<PropertyNode>) classNode.getProperties()) {
             FieldNode field = propertyNode.getField();
-            // look to see if per-field handlers will catch this one...
+            // look if per-field handlers will catch this one...
             if (hasScalifyAnnotation(field)
-                || field.isStatic())
-            {
+                || field.isStatic()) {
                 // explicitly labeled properties are already handled,
                 // don't transform static properties
                 continue;
@@ -194,7 +180,6 @@ public class ScalifyASTTransformation implements ASTTransformation, Opcodes {
                                         new ConstantExpression("0")))));
         // TODO generate pickle class attribute!!!
     }
-
 
     private void createScalaAccessors(SourceUnit source, AnnotationNode node, ClassNode classNode, PropertyNode propertyNode) {
         String setterName = propertyNode.getName()+"_$eq";
@@ -239,13 +224,13 @@ public class ScalifyASTTransformation implements ASTTransformation, Opcodes {
     }
 
     private static class MethodInfo {
-       private String name;
-       private int argCount;
+        private String name;
+        private int argCount;
 
-       public MethodInfo(String name, int argCount) {
-           super();
-           this.name = name;
-           this.argCount = argCount;
-       }
+        public MethodInfo(String name, int argCount) {
+            super();
+            this.name = name;
+            this.argCount = argCount;
+        }
     }
 }
