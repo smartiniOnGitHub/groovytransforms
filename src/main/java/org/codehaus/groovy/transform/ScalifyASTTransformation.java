@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 the original author or authors.
+ * Copyright 2009-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.lang.reflect.Modifier;
 
 import org.codehaus.groovy.ast.*;
 import org.codehaus.groovy.ast.expr.*;
@@ -32,7 +33,6 @@ import org.codehaus.groovy.runtime.MetaClassHelper;
 import org.codehaus.groovy.syntax.SyntaxException;
 import org.codehaus.groovy.transform.ASTTransformation;
 import org.codehaus.groovy.transform.GroovyASTTransformation;
-import org.objectweb.asm.Opcodes;
 
 import groovyx.transform.Scalify;
 import scala.ScalaObject;
@@ -51,7 +51,7 @@ import scala.ScalaObject;
  * @author Andres Almiray
  */
 @GroovyASTTransformation(phase= CompilePhase.CANONICALIZATION)
-public class ScalifyASTTransformation implements ASTTransformation, Opcodes {
+public class ScalifyASTTransformation implements ASTTransformation {
     protected static ClassNode boundClassNode = new ClassNode(Scalify.class);
     private static final ClassNode SCALA_OBJECT_IFACE = new ClassNode(ScalaObject.class);
     private static final Map<String, MethodInfo> METHOD_INFO_MAP = new HashMap<String, MethodInfo>();
@@ -171,7 +171,7 @@ public class ScalifyASTTransformation implements ASTTransformation, Opcodes {
         classNode.addMethod(
                 new MethodNode(
                         "$tag",
-                        ACC_PUBLIC,
+                        Modifier.PUBLIC,
                         ClassHelper.int_TYPE,
                         Parameter.EMPTY_ARRAY,
                         ClassNode.EMPTY_ARRAY,
@@ -183,7 +183,7 @@ public class ScalifyASTTransformation implements ASTTransformation, Opcodes {
 
     private void createScalaAccessors(SourceUnit source, AnnotationNode node, ClassNode classNode, PropertyNode propertyNode) {
         String setterName = propertyNode.getName()+"_$eq";
-        if ((propertyNode.getModifiers() & Opcodes.ACC_FINAL) == 0 &&
+        if ((propertyNode.getModifiers() & Modifier.FINAL) == 0 &&
             classNode.getMethods(setterName).isEmpty()) {
             Statement setterBlock =  new ExpressionStatement(
                 new MethodCallExpression(
