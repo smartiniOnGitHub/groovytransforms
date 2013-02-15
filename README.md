@@ -70,7 +70,7 @@ methods, these are the currently supported methods:
 | ~        | bitwiseNegate() | unary_$tilde()     |
 
 
-** NOTE : FULL COMPATIBILITY **
+**NOTE : FULL COMPATIBILITY**
 
 While `@Scalify can generate all the require boilerplate code it cannot (at the
 moment) generate a required class attribute (called pickle) that the Scala
