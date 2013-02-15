@@ -15,24 +15,24 @@ extending a Scala trait/class from Groovy.
 
 #### Usage
 
-Place `@Scalify at the class level, example;
+Place `@Scalify at the class level, example:
 
     // -- begin scala code
-    import scala.reflect.BeanProperty  
+    import scala.reflect.BeanProperty
 
-    trait Output {  
-       @BeanProperty var output: String  
-    } 
-
+    trait Output {
+       @BeanProperty var output: String
+    }
     // -- end Scala code
 
     // -- begin Groovy code
-    import groovyx.transform.Scalify  
-  
-    @Scalify  
-    class GroovyOutput implements Output {  
-       String output  
+    import groovyx.transform.Scalify
+
+    @Scalify
+    class GroovyOutput implements Output {
+       String output
     }
+    // -- end Groovy code
 
 When the trait `Output is compiled it will generate bytecode similar to
 
@@ -69,10 +69,9 @@ methods, these are the currently supported methods:
 | +        | positive()      | unary_$plus()      |
 | ~        | bitwiseNegate() | unary_$tilde()     |
 
-
 **NOTE : FULL COMPATIBILITY**
 
-While `@Scalify can generate all the require boilerplate code it cannot (at the
+While `@Scalify` can generate all the require boilerplate code it cannot (at the
 moment) generate a required class attribute (called pickle) that the Scala
 compiler uses to gather metadata information about a Scala class. This means you
 won't be able to call a property setter using the short notation, in other words
