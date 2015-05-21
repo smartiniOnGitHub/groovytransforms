@@ -1,19 +1,37 @@
-This module works like a sandbox for additional [AST Transformations][1] that
-can't be included in Groovy core for a particular reason, like additional
-dependencies or scope. Contributions are welcome!
+groovytransforms (or Scalify)
+=============================
 
-### Scalify
+This is a Groovy [AST Transformation][1] that provides integration of Groovy and Scala code.
+It's here because can't be included in Groovy core. Contributions are welcome!
 
-Provides integration with the Scala Programming language
 
-#### Description
+Distribution
+============
+
+Source distribution not available at the moment, 
+but its binary artifact groovytransforms-<version>.jar is available at JCenter.
+
+
+Dependencies
+============
+
+These project requires the following runtime dependencies
+
+* Groovy 2.0.0 or higher (recommended at least 2.0.8)
+* Scala 2.10.0 or higher (recommended at least 2.10.5 or 2.11.6) if using @Scalify
+
+
+Description
+===========
 
 `@Scalify` simplifies the task of integrating Groovy and Scala code. This
 transformation adds the required bytecode to your Groovy classes to make
 them appear as native Scala classes. It also helps when implementing or
 extending a Scala trait/class from Groovy.
 
-#### Usage
+
+Usage
+=====
 
 Place `@Scalify at the class level, example:
 
@@ -82,11 +100,38 @@ will result in a compilation error while the following will work
 
     new GroovyOutput().output_$eq("something")
 
-### Dependencies
 
-These project requires the following runtime dependencies
 
- * Groovy 2.1.0
- * Scala 2.10.0 (if using @Scalify)
+Installation
+============
 
-[1]: http://groovy.codehaus.org/Compile-time+Metaprogramming+-+AST+Transformations
+Use the distribution jar in your project.
+
+
+Documentation
+=============
+
+Home Page for the project (and sources) on GitHUB:
+[groovytransforms](https://github.com/smartiniOnGitHub/groovytransforms/)
+
+
+License
+=======
+
+Licensed under the terms of the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+
+Special Thanks
+==============
+Andres Almiray (aalmiray), original author of this project.
+
+
+Note
+====
+
+None.
+
+
+[1]: http://www.groovy-lang.org/metaprogramming.html
+
+
