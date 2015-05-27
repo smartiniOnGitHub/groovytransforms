@@ -13,6 +13,9 @@ Project Set-Up
 Building the project
 ====================
 
+Gradle usual build folder ('build') in this project has been changed to 'target' (the same of Maven), 
+so all build artifacts will be generated there.
+
 * To compile all source files into binary class files:
 
 		$ gradle build
@@ -21,10 +24,7 @@ or even to refresh dependencies
 
 		$ gradle build --refresh-dependencies
 
-
-* To compile and package all in a jar:
-
-		$ gradle package
+note that binary jar is generated in the libs subfolder of build folder.
 
 * To generate Javadoc
 

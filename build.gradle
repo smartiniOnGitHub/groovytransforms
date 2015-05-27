@@ -22,8 +22,6 @@ allprojects {
 	apply plugin: 'idea'
 
 	buildDir = 'target'
-	// sourceCompatibility = 1.6
-	// targetCompatibility = 1.6
 
 	configurations {
 	}
@@ -46,10 +44,12 @@ allprojects {
 		testCompile "junit:junit:$junitVersion"
 	}
 
-	artifacts {
-		archives jar
-	}
+}
 
+jar {
+	from {
+		['LICENSE','NOTICE']
+	}
 }
 
 
