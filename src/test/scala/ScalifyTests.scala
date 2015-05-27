@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
+import org.scalatest.junit.JUnitSuite
 import org.scalatest.junit.AssertionsForJUnit
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Matchers._
 import org.junit.Assert._
 import org.junit.Test
 
-class ScalifyTests extends AssertionsForJUnit with ShouldMatchers {
+class ScalifyTests extends JUnitSuite with AssertionsForJUnit {
     val subject1 = new GroovySubject("A")
     val subject2 = new GroovySubject("B")
 
