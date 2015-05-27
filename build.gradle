@@ -34,14 +34,7 @@ allprojects {
 	}
 
 	ext {
-		javaVersion = '1.6'
-		groovyVersion = '2.0.8'
-		scalaSuffixVersion = '_2.10'
-		scalaVersion = '2.10.5'
-
-		// junitVersion = '4.12'
-		junitVersion = '[4,)'
-		scalaTestVersion = '2.2.5'
+		// junitVersion = '[4,)'
 	}
 
 	dependencies {
