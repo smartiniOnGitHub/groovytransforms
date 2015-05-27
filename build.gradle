@@ -14,32 +14,49 @@
  * limitations under the License.
  */
 
-apply plugin: 'groovy'
-apply plugin: 'scala'
-apply plugin: 'maven'
+allprojects {
+	apply plugin: 'groovy'
+	apply plugin: 'scala'
+	apply plugin: 'maven'
+	apply plugin: 'eclipse'
+	apply plugin: 'idea'
 
-apply plugin: 'eclipse'
-apply plugin: 'idea'
+	buildDir = 'target'
+	// sourceCompatibility = 1.6
+	// targetCompatibility = 1.6
 
-configurations {
-}
+	configurations {
+	}
 
-repositories {
-	mavenLocal()
-	mavenCentral()
-}
+	repositories {
+		mavenLocal()
+		mavenCentral()
+	}
 
-dependencies {
-    compile 'org.codehaus.groovy:groovy:2.0.8'
-    compile 'org.scala-lang:scala-library:2.10.5'
-    compile 'org.scala-lang:scala-compiler:2.10.5'
+	ext {
+		javaVersion = '1.6'
+		groovyVersion = '2.0.8'
+		scalaSuffixVersion = '_2.10'
+		scalaVersion = '2.10.5'
 
-    testCompile('org.scalatest:scalatest_2.10:2.2.5') { transitive = false }
-    testCompile 'junit:junit:4.12'
-}
+		// junitVersion = '4.12'
+		junitVersion = '[4,)'
+		scalaTestVersion = '2.2.5'
+	}
 
-artifacts {
-    archives jar
+	dependencies {
+		compile "org.codehaus.groovy:groovy:$groovyVersion"
+		compile "org.scala-lang:scala-library:$scalaVersion"
+		compile "org.scala-lang:scala-compiler:$scalaVersion"
+
+		testCompile("org.scalatest:scalatest$scalaSuffixVersion:$scalaTestVersion") { transitive = false }
+		testCompile "junit:junit:$junitVersion"
+	}
+
+	artifacts {
+		archives jar
+	}
+
 }
 
 
@@ -50,8 +67,8 @@ task wrapper(type: Wrapper) {
 tasks.withType(JavaCompile) {
 	options.compilerArgs << "-Xlint:deprecation"
 	options.compilerArgs << "-Xlint:unchecked"
-	sourceCompatibility = "1.6"
-	targetCompatibility = "1.6"
+	sourceCompatibility = "$javaVersion"
+	targetCompatibility = "$javaVersion"
 }
 
 task info << { task -> println "In $task.project.name" }
