@@ -1,10 +1,9 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file except in
- * compliance with the License.  You may obtain a copy of the License at
+ * Copyright 2009-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,11 +18,10 @@ apply plugin: 'groovy'
 apply plugin: 'scala'
 apply plugin: 'maven'
 
-version = '0.3-SNAPSHOT'
-group = 'org.codehaus.groovy.modules'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
 
 configurations {
-    deployerJars
 }
 
 repositories {
@@ -38,84 +36,12 @@ dependencies {
 
     testCompile('org.scalatest:scalatest_2.10:2.2.5') { transitive = false }
     testCompile 'junit:junit:4.12'
-
-    deployerJars 'org.apache.maven.wagon:wagon-webdav:1.0-beta-2',
-                 'org.apache.maven:maven-ant-tasks:2.1.3'
 }
 
 artifacts {
     archives jar
 }
 
-/*
-// TODO: fix or remove ...
-
-installer = install.repositories.mavenInstaller
-def deployer = null
-
-if(!project.hasProperty('codehausUsername')) codehausUsername = ''
-if(!project.hasProperty('codehausPassword')) codehausPassword = ''
-
-uploadArchives {
-    repositories {
-        deployer = mavenDeployer {
-            name = 'codehausDeployer'
-            configuration = configurations.deployerJars
-            uploadDescriptor = true
-            repository(url: 'https://dav.codehaus.org/repository/gmod/') {
-                authentication(userName: codehausUsername, password: codehausPassword)
-            }
-            snapshotRepository(url: 'https://dav.codehaus.org/snapshots.repository/gmod/') {
-                uniqueVersion = false
-                authentication(userName: codehausUsername, password: codehausPassword)
-            }
-        }
-    }
-}
-
-[installer, deployer].each { repo ->
-    configure(repo) {
-        pom.project {
-            name 'Groovy Transforms'
-            description 'Additional AST Transformations for the Groovy language'
-            licenses {
-                license {
-                    name 'The Apache Software License, Version 2.0'
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    distribution 'repo'
-                }
-            }
-            repositories {
-                repository {
-                    id('codehaus-release')
-                    name('Codehaus')
-                    url('http://repository.codehaus.org')
-                }
-            }
-            issueManagement {
-                system 'JIRA'
-                url 'http://jira.codehaus.org/browse/GMOD'
-            }
-            scm {
-                developerConnection 'scm:https://svn.codehaus.org/gmod/groovytransforms/'
-                connection 'scm:http://svn.codehaus.org/gmod/groovytransforms/'
-                tag 'trunk'
-                url 'http://fisheye.codehaus.org/browse/gmod/groovytransforms/'
-            }
-            developers {
-                developer {
-                    name 'Andres Almiray'
-                    id 'aalmiray'
-                }
-                developer {
-                    name 'Sandro Martini'
-                    id 'smartini'
-                }
-            }
-        }
-    }
-}
- */
 
 task wrapper(type: Wrapper) {
 	gradleVersion = '2.4'
@@ -127,4 +53,6 @@ tasks.withType(JavaCompile) {
 	sourceCompatibility = "1.6"
 	targetCompatibility = "1.6"
 }
+
+task info << { task -> println "In $task.project.name" }
 
