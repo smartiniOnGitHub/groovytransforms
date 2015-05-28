@@ -29,6 +29,7 @@ allprojects {
 	repositories {
 		mavenLocal()
 		mavenCentral()
+		jcenter()
 	}
 
 	ext {
@@ -44,12 +45,12 @@ allprojects {
 		testCompile "junit:junit:$junitVersion"
 	}
 
-}
-
-jar {
-	from {
-		['LICENSE','NOTICE']
+	jar {
+		from {
+			['LICENSE','NOTICE']
+		}
 	}
+
 }
 
 
@@ -65,4 +66,34 @@ tasks.withType(JavaCompile) {
 }
 
 task info << { task -> println "In $task.project.name" }
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	classifier = 'javadoc'
+	// from 'build/docs/javadoc'
+	from 'target/docs/javadoc'
+}
+
+task sourcesJar(type: Jar) {
+	classifier = 'sources'
+	from sourceSets.main.allSource
+}
+
+javadocJar {
+	from {
+		['LICENSE','NOTICE']
+	}
+}
+
+sourcesJar {
+	from {
+		['LICENSE','NOTICE']
+	}
+}
+
+artifacts {
+	archives jar
+	archives javadocJar
+	archives sourcesJar
+}
+
 
