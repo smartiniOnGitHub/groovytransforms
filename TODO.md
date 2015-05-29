@@ -11,11 +11,16 @@ TODO
 - for 0.4:
 	- update to a newer Groovy release, like that used in Grails 2.5.x (Groovy 2.4.3, last before Groovy going at Apache) ...
 
-- for 0.3 :
+- for post-0.3 (test uploaded artifacts and update related docs/info):
 	- in README.md, add reference to binary artifacts to download them in a simple way (even by hand) ...
-	- put artifacts in a public area at JCenter, to be able to get/consume them for example from Grails Plugins ...
-	- test download of published jar, maybe with a Groovy Script under src/test/console/ ...
+	- test download of published jar from JCenter, maybe with a Groovy Script under src/test/console/ ...
 	- test from other projects (maybe at the beginning from a local jar), like Grails-Scala Plugin ...
+
+- for 0.3 (maintenance with small updates, update dependencies and remove some deprecations):
+	- put artifacts in a public area at BinTray, then link at JCenter, to be able to get/consume them for example from Grails Plugins ... ok
+	- pom: add a pom file (updated by hand, from previous 0.2 version), to be able to link/publish artifacts even at JCenter ... ok
+	- pom: include it in versioned files (just for backup purposes) ... ok
+	- pom: add inside it even the dependency on related Groovy version, just to make it explicit (I hope it will be a good addition here) ... ok
 	- little update for project structure, and add other support files ... ok
 	- check if change package name ... no, I think the current is good (unless objections from someone)
 	- check if change project name ... no, I think the current is good (unless objections from someone)
