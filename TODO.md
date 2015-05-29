@@ -59,6 +59,7 @@ DONE
 	- fix doc for Gradle command to generate binary jar (in BUILD.md) ... ok
 	- additional artifacts generation (and with LICENSE and NOTICE even in their root): even sources and javadoc jars ... ok
 	- update code to remove Scala deprecations ... ok but partial, because ScalaObject has been deprecated but there isn't a real alternative, check later for a better long-term solution
+	- update/commit changelog ... ok
 	- tag the release ... ok
 
 
