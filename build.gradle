@@ -40,6 +40,7 @@ allprojects {
 		compile "org.codehaus.groovy:groovy:$groovyVersion"
 		compile "org.scala-lang:scala-library:$scalaVersion"
 		compile "org.scala-lang:scala-compiler:$scalaVersion"
+		compile "org.scala-lang:scalap:$scalaVersion"
 
 		testCompile("org.scalatest:scalatest$scalaSuffixVersion:$scalaTestVersion") { transitive = false }
 		testCompile "junit:junit:$junitVersion"

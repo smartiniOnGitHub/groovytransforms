@@ -9,7 +9,9 @@ Distribution
 ============
 
 Source distribution not available at the moment, 
-but its binary artifact groovytransforms-<version>.jar is available at JCenter.
+but its binary artifact groovytransforms-<version>.jar is available at JCenter:
+[groovytransforms jars](https://bintray.com/smartiniontray/releases/groovytransforms/)
+note that there is the usual binary jar, but even sources and javadoc jar are available.
 
 
 Dependencies
@@ -106,6 +108,14 @@ Installation
 ============
 
 Use the distribution jar in your project.
+Or for example in Grails Projects, add the JCenter repository like the following:
+
+	// jcenter()  // ok in Grails 2.4 or later, so add it manually for now ...
+	mavenRepo("http://dl.bintray.com/smartiniontray/releases/")
+
+and then use it with
+
+	compile("org.codehaus.groovy.modules:groovytransforms:$groovytransformsVersion") { transitive = false }
 
 
 Documentation
